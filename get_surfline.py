@@ -10,7 +10,7 @@ tides_base_url = "https://services.surfline.com/kbyg/spots/forecasts/tides"
 wind_base_url = "https://services.surfline.com/kbyg/spots/forecasts/wind"
 base_url = "https://services.surfline.com/kbyg/spots/forecasts/"
 pp = pprint.PrettyPrinter(indent=1)
-logs_path = "/mnt/c/Users/djlut/Documents/Coding Projects/getsurf/surf_logs/"
+logs_path = "getsurf/surf_logs/"
 id_file = "spot_ids.csv"
 
 ''' Data from the base url is only every 3 hrs, does not get finer
@@ -54,16 +54,16 @@ def search(kywd, size=10):
 def get_spot_id():
     query = input("Where did you surf today?\n")
 
-    with open(id_file, 'rt') as f:
-        reader = csv.reader(f, delimiter=',')
-        for row in reader:
-            if query.lower() == row[0].lower():
-                return (row[0], row[1])
+#     with open(id_file, 'rt') as f:
+#         reader = csv.reader(f, delimiter=',')
+#         for row in reader:
+#             if query.lower() == row[0].lower():
+#                 return (row[0], row[1])
 
     name, _id = search(query)
-    with open(id_file, 'a') as f:
-        write_str = name + "," + _id + "\n"
-        f.write(write_str)
+#     with open(id_file, 'a') as f:
+#         write_str = name + "," + _id + "\n"
+#         f.write(write_str)
 
     return (name, _id)
 
@@ -146,7 +146,7 @@ def get_surf_time(question):
                             now.tm_yday, now.tm_isdst))
     return surf_time
 
-if __name__ == "__main__":
+def main():
     spot_name, spot_id = get_spot_id()
     waves, tides, wind = get_data(spot_id)
     time_start = get_surf_time("When did you start?\n")
@@ -161,7 +161,7 @@ if __name__ == "__main__":
 
 
     fname = logs_path + spot_name + "_" + time.strftime("%m_%d_%Y_%I%p", time.localtime(surf_log['time_start'])) + ".json" 
-
+    print(fname)
     save_json_data(fname, surf_log)
     
 
