@@ -149,6 +149,7 @@ def get_surf_time(question):
                             now.tm_yday, now.tm_isdst))
     return surf_time
 
+<<<<<<< HEAD
 
 
 
@@ -165,6 +166,9 @@ if __name__ == "__main__":
         )
     
     
+=======
+def main():
+>>>>>>> 8474081330eedc77d88e83c4b8293420d71896e8
     spot_name, spot_id = get_spot_id()
     waves, tides, wind = get_data(spot_id)
     time_start = get_surf_time("When did you start?\n")
@@ -178,9 +182,15 @@ if __name__ == "__main__":
                 'spot':spot_name}
 
 
+<<<<<<< HEAD
 #     fname = logs_path + spot_name + "_" + time.strftime("%m_%d_%Y_%I%p", time.localtime(surf_log['time_start'])) + ".json" 
 #     print(fname)
 #     save_json_data(fname, surf_log)
+=======
+    fname = logs_path + spot_name + "_" + time.strftime("%m_%d_%Y_%I%p", time.localtime(surf_log['time_start'])) + ".json" 
+    print(fname)
+    save_json_data(fname, surf_log)
+>>>>>>> 8474081330eedc77d88e83c4b8293420d71896e8
     
     print(surf_log)
     

@@ -1,4 +1,6 @@
-snowflake-connector-python==2.4.3
+numpy
+pyarrow
+snowflake-connector-python
 pandas==1.2.4
 requests==2.25.1
 boto3==1.17.51
