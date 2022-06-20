@@ -40,17 +40,14 @@ class SnowflakeConnection:
         except Exception as e:
             raise e
             
-    def load_snowflake_json(self):
+    def load_snowflake_json(self, json_data):
         
         ctx = self.connect()
-
-        with open ('getsurf/surf_logs/Pipes_06_17_2022_03PM.json', 'r') as infile:
-            data = json.load(infile)
 
         cs = ctx.cursor()
         try:
             cs.execute(f"use warehouse surfline_wh")
-            cs.execute("insert into surf_logs.surf_logs (select PARSE_JSON('%s'))" % json.dumps(data))
+            cs.execute("insert into surf_logs.surf_logs (select PARSE_JSON('%s'))" % json.dumps(json_data))
         finally:
             cs.close()
         ctx.close()
@@ -70,19 +67,3 @@ class SnowflakeConnection:
         finally:
             cs.close()
             ctx.close()
-
-
-
-snow_object = SnowflakeConnection(
-            user='surfline_user',
-            password=get_secret('surfline_db_password').get('surfline_db_password'),
-            account='bka04153',
-            warehouse='surfline_wh',
-            database='surfline',
-            schema='surfline_logs',
-            role='surfline_role'
-        )
-
-df_raw = snow_object.query_snowflake_json()
-pd.json_normalize(json.loads(df_raw.SURF_LOGS[0]))
-

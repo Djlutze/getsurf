@@ -5,6 +5,9 @@ import time
 import re
 import csv
 
+from database import SnowflakeConnection
+from aws import get_secret
+
 wave_base_url = "https://services.surfline.com/kbyg/spots/forecasts/wave"
 tides_base_url = "https://services.surfline.com/kbyg/spots/forecasts/tides"
 wind_base_url = "https://services.surfline.com/kbyg/spots/forecasts/wind"
@@ -146,7 +149,22 @@ def get_surf_time(question):
                             now.tm_yday, now.tm_isdst))
     return surf_time
 
-def main():
+
+
+
+if __name__ == "__main__":
+    
+    snow_object = SnowflakeConnection(
+            user='surfline_user',
+            password=get_secret('surfline_db_password').get('surfline_db_password'),
+            account='bka04153',
+            warehouse='surfline_wh',
+            database='surfline',
+            schema='surfline_logs',
+            role='surfline_role'
+        )
+    
+    
     spot_name, spot_id = get_spot_id()
     waves, tides, wind = get_data(spot_id)
     time_start = get_surf_time("When did you start?\n")
@@ -160,8 +178,12 @@ def main():
                 'spot':spot_name}
 
 
-    fname = logs_path + spot_name + "_" + time.strftime("%m_%d_%Y_%I%p", time.localtime(surf_log['time_start'])) + ".json" 
-    print(fname)
-    save_json_data(fname, surf_log)
+#     fname = logs_path + spot_name + "_" + time.strftime("%m_%d_%Y_%I%p", time.localtime(surf_log['time_start'])) + ".json" 
+#     print(fname)
+#     save_json_data(fname, surf_log)
     
-
+    print(surf_log)
+    
+    snow_object.load_snowflake_json(json_data = surf_log)
+    
+    
