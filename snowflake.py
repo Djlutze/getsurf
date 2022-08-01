@@ -40,7 +40,7 @@ class SnowflakeConnection:
         except Exception as e:
             raise e
             
-    def load_snowflake_json(self):
+    def load_snowflake_json(self, table):
         
         ctx = self.connect()
 
@@ -50,7 +50,7 @@ class SnowflakeConnection:
         cs = ctx.cursor()
         try:
             cs.execute(f"use warehouse surfline_wh")
-            cs.execute("insert into surf_logs.surf_logs (select PARSE_JSON('%s'))" % json.dumps(data))
+            cs.execute(f"insert into surf_logs.{table} (select PARSE_JSON('%s'))" % json.dumps(data))
         finally:
             cs.close()
         ctx.close()
