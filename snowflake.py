@@ -41,7 +41,7 @@ class SnowflakeConnection:
         except Exception as e:
             raise e
 
-    def load_snowflake_json(self, table):
+    def load_snowflake_json(self, json_data, table):
         """
         :params: table
             Alias table: surf_spot_alias
@@ -50,15 +50,12 @@ class SnowflakeConnection:
 
         ctx = self.connect()
 
-        with open("getsurf/surf_logs/Pipes_06_17_2022_03PM.json", "r") as infile:
-            data = json.load(infile)
-
         cs = ctx.cursor()
         try:
             cs.execute(f"use warehouse surfline_wh")
             cs.execute(
                 f"insert into surf_logs.{table} (select PARSE_JSON('%s'))"
-                % json.dumps(data)
+                % json.dumps(json_data)
             )
         finally:
             cs.close()
